@@ -1,0 +1,7 @@
+{% for input in inputs.list %}
+[monitor:///var/log/{{ input.source_name }}/*/*.log]
+index={{ input.index_name }}
+sourcetype={{ input.source_type }}
+host_segment=4
+
+{% endfor %}

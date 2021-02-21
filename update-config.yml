@@ -1,0 +1,30 @@
+---
+  - hosts: splunkuf
+    tasks:
+      - name: Read syslog sources from CSV file
+        community.general.read_csv:
+          path: syslog-sources.csv
+        register: sources
+        delegate_to: localhost
+      - name: Update splunk forwarder syslog-ng config file
+        template:
+          src: ./config/syslog-ng.conf.j2
+          dest: /etc/syslog-ng/conf.d/syslog-ng.conf
+          mode: 0644
+        become: yes
+      - name: Read inputs from CSV file
+        community.general.read_csv:
+          path: inputs.csv
+        register: inputs
+        delegate_to: localhost
+      - name: Update splunk forwarder syslog app inputs config file
+        template:
+          src: ./config/inputs.conf.j2
+          dest: /opt/splunkforwarder/etc/apps/splunk_syslog_inputs/local/inputs.conf
+          mode: 0644
+        become: yes
+      - name: Restart Splunk service
+        service:
+          name: splunk
+          state: restarted
+        become: yes

@@ -1,0 +1,4 @@
+source_name,index_name,source_type
+iosxe,network_iosxe,cisco:ios
+ise,network_ise,cisco:ise:syslog
+nexus,network_nexus,cisco:ios

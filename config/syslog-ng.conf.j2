@@ -1,0 +1,19 @@
+{% for source in sources.list %}
+source {{ source.name }}_syslog {
+           network(
+              ip(0.0.0.0)
+              port({{ source.port }})
+              transport({{ source.protocol }})
+           );
+};
+
+destination {{ source.log_name }}_file {
+                file ("/var/log/{{ source.log_name }}/${HOST}/{{ source.log_name }}-${YEAR}_${MONTH}_${DAY}.log" template("${MESSAGE}\n") create_dirs(yes));
+};
+
+log {
+               source({{ source.name }}_syslog);
+               destination({{ source.log_name }}_file);
+};
+
+{% endfor %}
